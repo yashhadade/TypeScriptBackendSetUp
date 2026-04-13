@@ -9,8 +9,15 @@ const stringRequired = (requiredMessage: string, typeMessage = 'Must be a string
 export const adminCreateSchema = z.object({
   name: stringRequired('name is required').min(1, 'Name is required'),
   email: stringRequired('email is required').email('Invalid email address'),
-  role: z.string().optional(),
   isActive: z.boolean().optional(),
+  password: stringRequired('Password is required')
+    .min(8, 'Password must be at least 8 characters long')
+    .refine((val) => /[A-Z]/.test(val), 'Password must contain at least one capital letter')
+    .refine((val) => /[0-9]/.test(val), 'Password must contain at least one number')
+    .refine(
+      (val) => /[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]/.test(val),
+      'Password must contain at least one special character'
+    ),
 });
 
 export const adminSetPasswordSchema = z.object({

@@ -7,7 +7,7 @@ const stringRequired = (requiredMessage: string, typeMessage = 'Must be a string
   });
 
 export const adminLoginSchema = z.object({
-  nameOrEmail: stringRequired('name or email is required'),
+  usernameOrEmail: stringRequired('username or email is required'),
   password: stringRequired('Password is required')
     .min(8, 'Password must be at least 8 characters long')
     .refine((val) => /[A-Z]/.test(val), 'Password must contain at least one capital letter')
@@ -16,4 +16,8 @@ export const adminLoginSchema = z.object({
       (val) => /[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]/.test(val),
       'Password must contain at least one special character'
     ),
+});
+
+export const refreshTokenSchema = z.object({
+  refreshToken: stringRequired('Refresh token is required'),
 });

@@ -1,8 +1,8 @@
 export interface CreateAdminData {
   name: string;
   email: string;
-  role?: string | undefined;
   isActive?: boolean | undefined;
+  password: string;
 }
 
 export interface SetAdminPasswordData {
@@ -10,10 +10,10 @@ export interface SetAdminPasswordData {
   password: string;
 }
 
-export interface Admin extends CreateAdminData {
-  _id: string;
-  password: string | null;
-}
+// export interface Admin extends CreateAdminData {
+//   _id: string;
+//   password: string | null;
+// }
 
 export interface AggregateResult {
   _id: string;
@@ -21,4 +21,13 @@ export interface AggregateResult {
   email: string;
   role: string;
   isActive: boolean;
+}
+
+export interface AdminInfo {
+  _id: string;
+  name: string;
+  email: string;
+  role: string;
+  isActive: boolean;
+  password: string | null;
 }

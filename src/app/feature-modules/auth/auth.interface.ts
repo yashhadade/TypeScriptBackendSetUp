@@ -7,6 +7,6 @@ export interface IClient {
 }
 
 export interface AdminLoginData {
-  nameOrEmail: string;
+  usernameOrEmail: string;
   password: string;
 }

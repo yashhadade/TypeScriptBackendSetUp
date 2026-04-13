@@ -1,12 +1,28 @@
 import { Redis } from 'ioredis';
 
-export const connectToRedis = async () => {
-  const { REDIS_HOST, REDIS_PORT } = process.env;
-  const redis = new Redis({
-    host: REDIS_HOST,
-    port: Number(REDIS_PORT),
+let redisClient: Redis | null = null;
+
+export const connectToRedis = async (): Promise<Redis> => {
+  if (redisClient) return redisClient;
+
+  const { REDIS_HOST, REDIS_PORT, REDIS_PASSWORD } = process.env;
+
+  const client = new Redis({
+    host: REDIS_HOST || '127.0.0.1',
+    port: Number(REDIS_PORT) || 6379,
+    ...(REDIS_PASSWORD ? { password: REDIS_PASSWORD } : {}),
+    maxRetriesPerRequest: 3,
+    lazyConnect: true,
   });
-  if (!redis) throw new Error('Failed to connect to Redis');
-  console.log('Connected to Redis', REDIS_HOST, REDIS_PORT);
-  return redis;
+
+  try {
+    await client.connect();
+    redisClient = client; // only assign on success
+    console.log('Connected to Redis');
+    return redisClient;
+  } catch (error) {
+    console.error('Failed to connect to Redis:', error);
+    client.disconnect(); // clean up the broken instance
+    throw error;
+  }
 };

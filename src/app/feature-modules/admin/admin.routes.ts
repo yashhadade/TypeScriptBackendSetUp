@@ -20,20 +20,12 @@ router.get('/', async (_req, res, next) => {
   }
 });
 
-// Seed dummy WhiteBox admins (idempotent)
-router.post('/seed-dummy', async (_req, res, next) => {
-  try {
-    const admins = await adminServices.seedDummy();
-    res.send(new ResponseHandler(admins, 'Dummy WhiteBox admins seeded'));
-  } catch (error) {
-    next(error);
-  }
-});
+
 
 // Create a single admin
 router.post('/create', validateBody(adminCreateSchema), async (req, res, next) => {
   try {
-    const { name, email, role, isActive } = req.body as CreateAdminData;
+    const { name, email, isActive, password } = req.body as CreateAdminData;
 
     const existing = await adminServices.findOneLean({ email: email.toLowerCase() });
     if (existing) throw ADMIN_RESPONSES.ADMIN_ALREADY_EXISTS_WITH_EMAIL;
@@ -41,8 +33,8 @@ router.post('/create', validateBody(adminCreateSchema), async (req, res, next) =
     const admin = await adminServices.create({
       name,
       email: email.toLowerCase(),
-      role,
       isActive,
+      password,
     });
 
     res.send(new ResponseHandler(admin));

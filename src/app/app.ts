@@ -12,7 +12,7 @@ export const startServer = async () => {
   try {
     const app = express();
     await connectToMongo();
-    await connectToRedis();
+    // await connectToRedis();
     registerRoutes(app);
 
     app.get('/health', (req, res) => {
