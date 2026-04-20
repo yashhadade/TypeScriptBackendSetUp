@@ -13,4 +13,5 @@ export default { routes };
 export const excludedPaths = [
   new ExcludedPath('/admin/create', 'POST'),
   new ExcludedPath('/auth/admin/login', 'POST'),
+  new ExcludedPath('/auth/refresh', 'POST'),
 ];
