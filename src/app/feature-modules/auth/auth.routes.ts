@@ -3,7 +3,7 @@ import { ResponseHandler } from '../../utility/response.handler.js';
 import authServices from './auth.services.js';
 import { Route } from '../../routes/routes.types.js';
 import { validateBody } from '../../middleware/validateRequest.js';
-import type { AdminLoginData } from './auth.interface.js';
+import type { IAdminLoginData } from './auth.interface.js';
 import { adminLoginSchema, refreshTokenSchema } from './auth.validate.js';
 const router = Router();
 
@@ -11,8 +11,8 @@ const router = Router();
 
 router.post('/admin/login', validateBody(adminLoginSchema), async (req, res, next) => {
   try {
-    const { usernameOrEmail, password } = req.body as AdminLoginData;
-    const result = await authServices.AdminLogin(usernameOrEmail as string, password as string);
+    const { usernameOrEmail, password } = req.body as IAdminLoginData;
+    const result = await authServices.AdminLogin(usernameOrEmail, password);
     res.send(new ResponseHandler(result));
   } catch (error: unknown) {
     next(error);

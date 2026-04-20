@@ -1,7 +1,7 @@
 import type { Request, Response, NextFunction } from 'express';
 import { ResponseHandler } from '../utility/response.handler.js';
 import { ZodError } from 'zod';
-
+import logger from '../../logger.js';
 /** Thrown response objects (e.g. CLIENT_RESPONSES.CLIENT_NOT_FOUND) and Error-like objects */
 interface ErrorWithStatus {
   statusCode?: number;
@@ -18,7 +18,7 @@ export const errorHandler = (
   res: Response,
   _next: NextFunction
 ): void => {
-  console.error(err);
+  logger.error('Error in request', err);
 
   let statusCode = 500;
   let message: string = 'Internal Server Error';

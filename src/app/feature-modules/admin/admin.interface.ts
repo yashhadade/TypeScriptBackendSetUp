@@ -1,13 +1,22 @@
-export interface CreateAdminData {
+export interface ICreateAdmin {
   name: string;
   email: string;
   isActive?: boolean | undefined;
   password: string;
+  role?: string | undefined;
 }
 
-export interface SetAdminPasswordData {
+export interface ISetAdminPassword {
   email: string;
   password: string;
+}
+
+export interface IUpdateAdmin {
+  name?: string | undefined;
+  email?: string | undefined;
+  isActive?: boolean | undefined;
+  password?: string | undefined;
+  role?: string | undefined;
 }
 
 // export interface Admin extends CreateAdminData {
@@ -15,7 +24,7 @@ export interface SetAdminPasswordData {
 //   password: string | null;
 // }
 
-export interface AggregateResult {
+export interface IAggregateResult {
   _id: string;
   name: string;
   email: string;
@@ -23,11 +32,19 @@ export interface AggregateResult {
   isActive: boolean;
 }
 
-export interface AdminInfo {
+export interface IAdminInfo {
   _id: string;
   name: string;
   email: string;
   role: string;
   isActive: boolean;
-  password: string | null;
+  password?: string | null|undefined;
+}
+
+export interface IAdmin {
+  name: string;
+  email: string;
+  role?: string|undefined;
+  isActive?: boolean|undefined;
+  password?: string | null|undefined;
 }

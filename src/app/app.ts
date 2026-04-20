@@ -5,6 +5,7 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import { connectToRedis } from './db.cache.connection/connection.redis.js';
 import { ResponseHandler } from './utility/response.handler.js';
+import logger from '../logger.js';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
@@ -26,10 +27,10 @@ export const startServer = async () => {
     const host = '0.0.0.0';
 
     app.listen(Number(port), host, () => {
-      console.log('server is listening on port :', port);
+      logger.info(`server is listening on port : ${port}`);
     });
   } catch (error) {
-    console.log(error);
+    logger.error('Error starting server', error);
     process.exit(1);
   }
 };

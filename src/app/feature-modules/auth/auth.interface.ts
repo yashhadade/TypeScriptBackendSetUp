@@ -6,7 +6,7 @@ export interface IClient {
   role: string;
 }
 
-export interface AdminLoginData {
+export interface IAdminLoginData {
   usernameOrEmail: string;
   password: string;
 }

@@ -1,8 +1,9 @@
 import { BaseSchema } from '../../utility/base.schema.js';
 import { model } from 'mongoose';
 import { Role } from '../../utility/constant.js';
+import type { IAdmin } from './admin.interface.js';
 
-const adminSchema = new BaseSchema({
+const admin_schema = new BaseSchema({
   name: {
     type: String,
     required: true,
@@ -27,4 +28,4 @@ const adminSchema = new BaseSchema({
   },
 });
 
-export const adminModel = model('admins', adminSchema);
+export const adminModel =   model<IAdmin>('admins', admin_schema);

@@ -1,6 +1,7 @@
 import type { Request, Response, NextFunction } from 'express';
+import logger from '../../logger.js';
 
 export const pathLogger = (req: Request, res: Response, next: NextFunction): void => {
-  console.log(`${req.method}: ${req.originalUrl}`);
+  logger.info(`${req.method}: ${req.originalUrl}`);
   next();
 };

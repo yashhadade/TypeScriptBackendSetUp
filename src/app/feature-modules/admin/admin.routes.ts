@@ -3,10 +3,9 @@ import adminServices from './admin.services.js';
 import { ResponseHandler } from '../../utility/response.handler.js';
 import { ADMIN_RESPONSES } from './admin.responces.js';
 import { Route } from '../../routes/routes.types.js';
-import type { CreateAdminData } from './admin.interface.js';
+import type { ICreateAdmin,ISetAdminPassword } from './admin.interface.js';
 import { validateBody } from '../../middleware/validateRequest.js';
 import { adminCreateSchema, adminSetPasswordSchema } from './admin.validate.js';
-import type { SetAdminPasswordData } from './admin.interface.js';
 import { Types } from 'mongoose';
 const router = express.Router();
 
@@ -25,7 +24,7 @@ router.get('/', async (_req, res, next) => {
 // Create a single admin
 router.post('/create', validateBody(adminCreateSchema), async (req, res, next) => {
   try {
-    const { name, email, isActive, password } = req.body as CreateAdminData;
+    const { name, email, isActive, password } = req.body as ICreateAdmin;
 
     const existing = await adminServices.findOneLean({ email: email.toLowerCase() });
     if (existing) throw ADMIN_RESPONSES.ADMIN_ALREADY_EXISTS_WITH_EMAIL;
@@ -45,7 +44,7 @@ router.post('/create', validateBody(adminCreateSchema), async (req, res, next) =
 
 router.post('/setAdminPassword', validateBody(adminSetPasswordSchema), async (req, res, next) => {
   try {
-    const { email, password } = req.body as SetAdminPasswordData;
+    const { email, password } = req.body as ISetAdminPassword;
 
     await adminServices.setAdminPassword(email, password);
     res.send(new ResponseHandler('Password set successfully'));

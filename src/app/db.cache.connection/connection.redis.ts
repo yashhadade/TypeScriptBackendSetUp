@@ -1,5 +1,5 @@
 import { Redis } from 'ioredis';
-
+import logger from '../../logger.js';
 let redisClient: Redis | null = null;
 
 export const connectToRedis = async (): Promise<Redis> => {
@@ -18,10 +18,10 @@ export const connectToRedis = async (): Promise<Redis> => {
   try {
     await client.connect();
     redisClient = client; // only assign on success
-    console.log('Connected to Redis');
+    logger.info('Connected to Redis');
     return redisClient;
   } catch (error) {
-    console.error('Failed to connect to Redis:', error);
+    logger.error('Failed to connect to Redis:', error);
     client.disconnect(); // clean up the broken instance
     throw error;
   }

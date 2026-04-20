@@ -1,49 +1,51 @@
 import type { PipelineStage, Types } from 'mongoose';
 import bcrypt from 'bcrypt';
 import adminRepo from './admin.repo.js';
-import type { AggregateResult, AdminInfo, CreateAdminData } from './admin.interface.js';
+import type { IAggregateResult, IAdmin, IAdminInfo, ICreateAdmin } from './admin.interface.js';
 import { ADMIN_RESPONSES } from './admin.responces.js';
 
 type MongoFilter = Record<string, unknown>;
 
-const create = async (adminData: CreateAdminData) => {
+const create = async (adminData: ICreateAdmin) => {
   const admin = await adminRepo.create({
     name: adminData.name,
     email: adminData.email.toLowerCase(),
     isActive: adminData.isActive,
-    password: await bcrypt.hash(adminData.password, 10),
+    password: await bcrypt.hash(adminData.password, 10)
   });
-  return admin;
+  return admin as IAdmin | null;
 };
 
 const find = async (filter: MongoFilter = {}) => {
   const admin = await adminRepo.find(filter);
-  return admin as unknown as AdminInfo[];
+  return admin as unknown as IAdminInfo[]; 
 };
 
 const findLean = async (filter: MongoFilter = {}) => {
   const admin = await adminRepo.findLean(filter);
-  return admin as unknown as AdminInfo[];
+  return admin as unknown as IAdminInfo[];
 };
 
 const findOne = async (filter: MongoFilter = {}) => {
   const admin = await adminRepo.findOne(filter);
-  return admin as unknown as AdminInfo | null;
+  return admin as unknown as IAdminInfo | null;
 };
 
 const findOneLean = async (filter: MongoFilter = {}) => {
   const admin = await adminRepo.findOneLean(filter);
-  return admin as unknown as AdminInfo | null;
+  return admin as unknown as IAdminInfo | null;
 };
 
 const update = async (id: string | Types.ObjectId, updateData: Record<string, unknown>) => {
-  const admin = await adminRepo.update(id, updateData);
-  return admin;
+  await adminRepo.update(id, updateData);
+  const admin = await adminRepo.findOne({ _id: id });
+  return admin as IAdmin | null;
 };
 
 const remove = async (id: string | Types.ObjectId) => {
-  const admin = await adminRepo.remove(id);
-  return admin;
+  await adminRepo.remove(id);
+  const admin = await adminRepo.findOne({ _id: id });
+  return admin as IAdmin | null;
 };
 
 const setAdminPassword = async (email: string, password: string) => {
@@ -53,11 +55,11 @@ const setAdminPassword = async (email: string, password: string) => {
 
   const hashedPassword = await bcrypt.hash(password, 10);
   const updatedAdmin = await update(String(admin._id), { password: hashedPassword });
-  return updatedAdmin;
+  return updatedAdmin as IAdmin;
 };
 
-const aggregate = (pipeline: PipelineStage[]): Promise<AggregateResult[]> =>
-  adminRepo.aggregate<AggregateResult>(pipeline).exec();
+const aggregate = (pipeline: PipelineStage[]): Promise<IAggregateResult[]> =>
+  adminRepo.aggregate<IAggregateResult>(pipeline).exec();
 
 export default {
   create,
